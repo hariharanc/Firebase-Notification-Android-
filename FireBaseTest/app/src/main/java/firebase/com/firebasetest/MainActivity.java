@@ -16,6 +16,7 @@
 
 package firebase.com.firebasetest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button btnLogToken = (Button) findViewById(R.id.btn_log_token);
+        Button btnNext=(Button)findViewById(R.id.btnNext);
         btnLogToken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
                 String msg = getString(R.string.msg_token_fmt, token);
                 Log.d(TAG, msg);
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intetHome=new Intent(MainActivity.this,NextPage.class);
+                startActivity(intetHome);
             }
         });
     }

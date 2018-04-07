@@ -29,6 +29,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
+import java.util.Random;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -66,8 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
          *@see data message json format
          * Header Filed::
          * Content-Type:application/json
-         * Authorization:key=AIzaSyB9IEv_M6AEHiizWAmYjE2PqsPtBQQaY9s
-         *
+         * key=AAAA0XtIz9s:APA91bFDU-2ECFA3BLnGeLSx3PoZkVh7vJNA6w86KMGLbZgtCQp1EtNwQpf0CzWhFB7sNYjzJMDsFeMxllk-_L0bVjyPTHKnBLim24jqnQOWr771hVixxNi2j2k7OqxiBKA-Aug3Cax-
          * Raw Data::
          * {
         "data" : {
@@ -98,12 +98,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
          *@see notification message json format
          * Header Filed::
          * Content-Type:application/json
-         * Authorization:key=AIzaSyB9IEv_M6AEHiizWAmYjE2PqsPtBQQaY9s
-         *
+         * Authorization:key=AAAA0XtIz9s:APA91bFDU-2ECFA3BLnGeLSx3PoZkVh7vJNA6w86KMGLbZgtCQp1EtNwQpf0CzWhFB7sNYjzJMDsFeMxllk-_L0bVjyPTHKnBLim24jqnQOWr771hVixxNi2j2k7OqxiBKA-Aug3Cax-
          * Raw Data::
-         *  {
-         *"to" : "flyB_zeDgo4:APA91bHZcxc3sUiWSM5Y4rrwD_sPbyRRLyA0mUWHZ2BzRLPdl2Bro81kKA8UVdia9Lxx7k7OmnkDtDGGSko4aoCzspSjAvlkltLYacZTMhzXVV5fuRAurRga2S2VMmHOn2CpS4JWGI_T",
-         "notification" : {
+         *
+         *
+         * {
+        "to" : "flyB_zeDgo4:APA91bHZcxc3sUiWSM5Y4rrwD_sPbyRRLyA0mUWHZ2BzRLPdl2Bro81kKA8UVdia9Lxx7k7OmnkDtDGGSko4aoCzspSjAvlkltLYacZTMhzXVV5fuRAurRga2S2VMmHOn2CpS4JWGI_T",
+        "notification" : {
         "body" : "App background",
         "title" : "Portugal vs. Denmark",
         "icon" : "myicon"
@@ -130,7 +131,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        ///else use  PendingIntent.FLAG_NO_CREATE(Note:our case check with broadcast receiver button events)
+
+        //NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.mipmap.ic_launcher, "Go", pendingIntent).build();
+
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
@@ -144,6 +150,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(generateRandom() /* ID of notification */, notificationBuilder.build());
+    }
+
+    public int generateRandom() {
+        Random random = new Random();
+        return random.nextInt(9999 - 1000) + 1000;
     }
 }
